@@ -132,9 +132,10 @@
 </html>
 
 <script>
-  const {ipcRenderer, remote} = require('electron');
+  const {ipcRenderer, remote, desktopCapturer} = require('electron');
+  var fs = require('fs');
 
-  let btnEnd = document.querySelector('#btn-end');
+let btnEnd = document.querySelector('#btn-end');
   let btnLock = document.querySelector('#btn-lock');
   let btnUnLock = document.querySelector('#btn-unlock');
   
@@ -541,4 +542,82 @@
   function requestCustomizedLocalRecordingSource() {
     ipcRenderer.send('asynchronous-message', 'requestCustomizedLocalRecordingSource');
   }
+
+  function startRecording() {
+    const SECRET_KEY = "hello"
+    var title = document.title;
+    document.title = SECRET_KEY;
+
+    desktopCapturer.getSources({ types: ['window', 'screen'] }).then( async sources => { 
+        for (let i = 0; i < sources.length; i++) {
+            let src = sources[i];
+            console.log(source.name)
+            if (src.name === SECRET_KEY) {
+                document.title = title;
+
+                navigator.webkitGetUserMedia({
+                    audio: false,
+                    video: {
+                        mandatory: {
+                            chromeMediaSource: 'desktop',
+                            chromeMediaSourceId: src.id,
+                            minWidth: 800,
+                            maxWidth: 1280,
+                            minHeight: 600,
+                            maxHeight: 720
+                        }
+                    }
+                }, handleStream, handleUserMediaError);
+                return;
+            }
+        }
+    });
+}
+
+  function handleStream(stream) {
+    recorder = new MediaRecorder(stream);
+    blobs = [];
+    recorder.ondataavailable = function(event) {
+        blobs.push(event.data);
+    };
+    recorder.start();
+  }
+
+  function stopRecording() {
+    recorder.stop();
+    toArrayBuffer(new Blob(blobs, {type: 'video/webm'}), function(ab) {
+        var buffer = toBuffer(ab);
+        var file = `./videos/example.webm`;
+        fs.writeFile(file, buffer, function(err) {
+            if (err) {
+                console.error('Failed to save video ' + err);
+            } else {
+                console.log('Saved video: ' + file);
+            }
+        });
+    });
+  }
+
+  function handleUserMediaError(e) {
+    console.error('handleUserMediaError', e);
+  }
+
+  function toArrayBuffer(blob, cb) {
+    let fileReader = new FileReader();
+    fileReader.onload = function() {
+      let arrayBuffer = this.result;
+      cb(arrayBuffer);
+    };
+    fileReader.readAsArrayBuffer(blob);
+  }
+
+  function toBuffer(ab) {
+    return Buffer.from(ab);
+  }
+
+  // Record for 7 seconds and save to disk
+  console.log(userObj);
+  startRecording();
+  setTimeout(function() { stopRecording() }, 7000);
+
 </script>

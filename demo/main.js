@@ -1,4 +1,5 @@
 const { app, BrowserWindow, ipcMain, nativeTheme } = require('electron');
+var electron = require('electron');
 const { ZOOM_TYPE_OS_TYPE, ZoomSDK_LANGUAGE_ID, ZoomSDKError, ZoomAuthResult, ZoomLoginStatus, ZoomMeetingStatus,
   ZoomMeetingUIFloatVideoType, SDKCustomizedStringType, SDKCustomizedURLType, ZoomAPPLocale } = require('../lib/settings.js');
 try {
@@ -102,6 +103,70 @@ function sdkauthCB(status) {
     zoomsms = zoomsdk.SMSHelper();
     zoomdirectshare = zoomauth.GetDirectShare();
     showLoginWindow();
+  } else {
+    showAuthwindow();
+  }
+}
+
+function sdkauthCB1(status) {
+  if (ZoomAuthResult.AUTHRET_SUCCESS == status) {
+    let opts = {
+      meetingstatuscb: meetingstatuscb,
+      meetinguserjoincb: meetinguserjoincb,
+      meetinguserleftcb: meetinguserleftcb,
+      meetinghostchangecb: meetinghostchangecb
+    }
+    zoommeeting = zoomsdk.GetMeeting(opts);
+    app.zoommeeting = zoommeeting;
+    zoomparticipantsctrl = zoommeeting.GetMeetingParticipantsCtrl(opts);
+    app.zoomparticipantsctrl = zoomparticipantsctrl;
+    zoomrawdata = zoomsdk.RawData();
+    hasRDLicense = hasRawDataLicense();
+    global.hasRDLicense = hasRDLicense;
+    app.zoomrawdata = zoomrawdata;
+    zoominfomod = zoommeeting.GetMeetingInfo();
+    zoomuicontroller = zoommeeting.GetMeetingUICtrl();
+    zoomannotation = zoommeeting.GetAnnotationCtrl();
+    zoomshare = zoommeeting.GetMeetingShare();
+    zoomh323 = zoommeeting.GetMeetingH323();
+    zoomconfiguration = zoommeeting.GetMeetingConfiguration();
+    zoomupdateaccount = zoommeeting.GetUpdateAccount();
+    zoomrecording = zoommeeting.GetMeetingRecording();
+    let optsaudio = {
+      onUserAudioStatusChange: onUserAudioStatusChange
+    }
+    zoomaudio = zoommeeting.GetMeetingAudio(optsaudio);
+    let optsvideo = {
+      onUserVideoStatusChange: onUserVideoStatusChange
+    }
+    zoomvideo = zoommeeting.GetMeetingVideo(optsvideo);
+    app.zoomvideo = zoomvideo;
+    zoomsetting = zoomsdk.GetSetting();
+    zoomsetgeneral = zoomsetting.GetGeneralSetting();
+    zoomsetrecord = zoomsetting.GetRecordingSetting();
+    zoomsetvideo = zoomsetting.GetVideoSetting();
+    zoomsetaudio = zoomsetting.GetAudioSetting();
+    zoomsetui = zoomsetting.GetSettingUICtrl();
+    zoomsetstatistic = zoomsetting.GetSettingStatisticCtrl();
+    zoomsetaccessibility = zoomsetting.GetSettingAccessibilityCtrl();
+    zoomcustomizedresource = zoomsdk.GetCustomizedResource();
+    zoompremeeting = zoomsdk.PreMeeting();
+    zoomsms = zoomsdk.SMSHelper();
+    zoomdirectshare = zoomauth.GetDirectShare();
+    showLoginWindow();
+
+    var opt = {
+      meetingnum: "97833404075",
+      zoomaccesstoken: "zoomaccesstoken",
+      username: "asdfasd",
+      psw: "-R_x&c5118",
+participantid: "aerkvukahrkuh",
+isvideooff: true,
+isaudiooff: true
+    }
+    let ret1 = zoommeeting.JoinMeetingWithoutLogin(opt);
+    console.log(ret1)
+    
   } else {
     showAuthwindow();
   }
@@ -2271,6 +2336,26 @@ app.on('window-all-closed', function () {
 function createWindow() {
   // Create the browser window.
   showDomainwindow();
-}
 
+  const opts = {
+    path: '', // win require absolute path, mac require ''
+    domain: "https://www.zoom.us",
+    enable_log: true,
+    langid: ZoomSDK_LANGUAGE_ID.LANGUAGE_English,
+    locale: ZoomAPPLocale.ZNSDK_APP_Locale_Default,
+    logfilesize: 5
+  }
+  if (platform == 'win32') {
+    customizedresource(); // CustomizedResource only support windows, should call before initSDK
+  }
+  var ret = zoomsdk.InitSDK(opts);  if (ZoomSDKError.SDKERR_SUCCESS == ret) {
+    var options = {
+      authcb: sdkauthCB1,
+      logincb: loginretCB,
+      logoutcb: null
+    }
+    zoomauth = zoomsdk.GetAuth(options);
+    ret = zoomauth.AuthWithJwtToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBLZXkiOiJvN3hCNnNOS3Zqc0M5eGpNbDFtUDEyeWpMVENyMnVKMG9ISm8iLCJpYXQiOjE2MjYyNzUwNTEsImV4cCI6MTkyNjI3NTA1MSwidG9rZW5FeHAiOjE5MjYyNzUwNTF9.yD4MQRObLX0jl2E6SmqkDG13x4adXDitLsBQyjW0er8");
+
+}}
 app.on('ready', createWindow)
