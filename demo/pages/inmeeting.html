@@ -552,7 +552,12 @@ let btnEnd = document.querySelector('#btn-end');
         for (const source of sources) {
             if (source.name.includes("Zoom Meeting Participant")) {
                 navigator.webkitGetUserMedia({
-                    audio: false,
+                    audio: {
+                      mandatory: {
+                        chromeMediaSource: 'desktop',
+                        chromeMediaSourceId: source.id,
+                        }
+                      },
                     video: {
                         mandatory: {
                             chromeMediaSource: 'desktop',
@@ -614,6 +619,6 @@ let btnEnd = document.querySelector('#btn-end');
   // Record for 7 seconds and save to disk
   console.log(userList);
   startRecording();
-  setTimeout(function() { stopRecording() }, 15000);
+  setTimeout(function() { stopRecording() }, 80000);
 
 </script>
