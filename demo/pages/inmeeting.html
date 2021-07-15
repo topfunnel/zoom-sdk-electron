@@ -140,7 +140,6 @@ let btnEnd = document.querySelector('#btn-end');
   let btnUnLock = document.querySelector('#btn-unlock');
   
   let zoomparticipantsctrl = remote.app.zoomparticipantsctrl;
-  let meetinginfo = remote.app.zoommeeting.GetMeetingInfo();
   let userList = zoomparticipantsctrl.GetParticipantsList();
   let userObj = zoomparticipantsctrl.GetUserInfoByUserID(userList[0].userid);
   let isHost = userObj.isHost;
@@ -618,10 +617,8 @@ let btnEnd = document.querySelector('#btn-end');
     return Buffer.from(ab);
   }
 
-  console.log(meetinginfo)
-
   // Record for 7 seconds and save to disk
-  console.log(userList[0]);
+  console.log(userList);
   startRecording();
   setTimeout(function() { stopRecording() }, 7000);
 
