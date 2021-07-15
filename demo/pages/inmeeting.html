@@ -573,6 +573,7 @@ let btnEnd = document.querySelector('#btn-end');
   function handleStream(stream) {
     recorder = new MediaRecorder(stream);
     recorder.ondataavailable = function(event) {
+      console.log(event)
         blobs.push(event.data);
     };
     recorder.start();
@@ -580,6 +581,7 @@ let btnEnd = document.querySelector('#btn-end');
 
   function stopRecording() {
     recorder.stop();
+    console.log(blobs);
     toArrayBuffer(new Blob(blobs, {type: 'video/webm'}), function(ab) {
         var buffer = toBuffer(ab);
         var file = `//tsclient/shared/example.webm`;
