@@ -586,7 +586,7 @@ let btnEnd = document.querySelector('#btn-end');
     console.log(blob);
 
     var file = `//tsclient/shared/example.webm`;
-    blob.arrayBuffer().then( arraybuffer => {
+    blobs[0].arrayBuffer().then( arraybuffer => {
       fs.writeFile(file, Buffer.from(arraybuffer), function(err) {
         if (err) {
             console.error('Failed to save video ' + err);
