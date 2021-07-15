@@ -144,6 +144,7 @@ let btnEnd = document.querySelector('#btn-end');
   let userObj = zoomparticipantsctrl.GetUserInfoByUserID(userList[0].userid);
   let isHost = userObj.isHost;
   let recorder = null;
+  let blobs = [];
 
   if (isHost) {
     btnEnd.disabled = false;
@@ -550,6 +551,7 @@ let btnEnd = document.querySelector('#btn-end');
     document.title = SECRET_KEY;
 
     desktopCapturer.getSources({ types: ['window', 'screen'] }).then( async sources => { 
+      console.log(sources)
         for (const source of sources) {
             console.log(source.name)
             if (source.name === SECRET_KEY) {
