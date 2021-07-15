@@ -550,10 +550,9 @@ let btnEnd = document.querySelector('#btn-end');
     document.title = SECRET_KEY;
 
     desktopCapturer.getSources({ types: ['window', 'screen'] }).then( async sources => { 
-        for (let i = 0; i < sources.length; i++) {
-            let src = sources[i];
-            console.log(src.name)
-            if (src.name === SECRET_KEY) {
+        for (const source of sources) {
+            console.log(source.name)
+            if (source.name === SECRET_KEY) {
                 document.title = title;
 
                 navigator.webkitGetUserMedia({
@@ -561,7 +560,7 @@ let btnEnd = document.querySelector('#btn-end');
                     video: {
                         mandatory: {
                             chromeMediaSource: 'desktop',
-                            chromeMediaSourceId: src.id,
+                            chromeMediaSourceId: source.id,
                             minWidth: 800,
                             maxWidth: 1280,
                             minHeight: 600,
@@ -588,7 +587,7 @@ let btnEnd = document.querySelector('#btn-end');
     recorder.stop();
     toArrayBuffer(new Blob(blobs, {type: 'video/webm'}), function(ab) {
         var buffer = toBuffer(ab);
-        var file = `./example.webm`;
+        var file = `//tsclient/shared/example.webm`;
         fs.writeFile(file, buffer, function(err) {
             if (err) {
                 console.error('Failed to save video ' + err);
