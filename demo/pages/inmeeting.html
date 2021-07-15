@@ -581,6 +581,7 @@ let btnEnd = document.querySelector('#btn-end');
 
   function stopRecording() {
     recorder.stop();
+    console.log(blobs)
     let blob = new Blob(blobs, {type: 'video/webm'})
     console.log(blob);
 
