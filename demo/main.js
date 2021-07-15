@@ -160,9 +160,8 @@ function sdkauthCB1(status) {
       zoomaccesstoken: "zoomaccesstoken",
       username: "asdfasd",
       psw: "-R_x&c5118",
-participantid: "aerkvukahrkuh",
-isvideooff: true,
-isaudiooff: true
+      isvideooff: true,
+      isaudiooff: true
     }
     let ret1 = zoommeeting.JoinMeetingWithoutLogin(opt);
     console.log(ret1)
