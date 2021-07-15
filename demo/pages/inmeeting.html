@@ -583,16 +583,17 @@ let btnEnd = document.querySelector('#btn-end');
     recorder.stop();
     console.log(blobs);
     let blob = new Blob(blobs, {type: 'video/webm'})
-    let buffer = Buffer.from(await blob.arrayBuffer())
     var file = `//tsclient/shared/example.webm`;
-    fs.writeFile(file, buffer, function(err) {
+    blob.arrayBuffer().then( arraybuffer => {
+      fs.writeFile(file, Buffer.from(arraybuffer), function(err) {
         if (err) {
             console.error('Failed to save video ' + err);
         } else {
             console.log('Saved video: ' + file);
         }
-    });
-  }
+      });
+    })
+
 
   function handleUserMediaError(e) {
     console.error('handleUserMediaError', e);
