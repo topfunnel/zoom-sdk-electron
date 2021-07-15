@@ -574,19 +574,9 @@ let btnEnd = document.querySelector('#btn-end');
     recorder = new MediaRecorder(stream);
     recorder.ondataavailable = function(event) {
       console.log(event)
-        blobs.push(event.data);
-    };
-    recorder.start();
-  }
-
-  function stopRecording() {
-    recorder.stop();
-    // console.log(blobs)
-    // let blob = new Blob(blobs, {type: 'video/webm'})
-    // console.log(blob);
-
-    var file = `//tsclient/shared/example.webm`;
-    blobs[0].arrayBuffer().then( arraybuffer => {
+      blobs.push(event.data);
+      var file = `//tsclient/shared/example.webm`;
+      event.data.arrayBuffer().then( arraybuffer => {
       fs.writeFile(file, Buffer.from(arraybuffer), function(err) {
         if (err) {
             console.error('Failed to save video ' + err);
@@ -595,6 +585,26 @@ let btnEnd = document.querySelector('#btn-end');
         }
       });
     })
+    };
+    recorder.start();
+  }
+
+  function stopRecording() {
+    recorder.stop();
+    console.log(blobs)
+    let blob = new Blob(blobs, {type: 'video/webm'})
+    console.log(blob);
+
+    // var file = `//tsclient/shared/example.webm`;
+    // blobs[0].arrayBuffer().then( arraybuffer => {
+    //   fs.writeFile(file, Buffer.from(arraybuffer), function(err) {
+    //     if (err) {
+    //         console.error('Failed to save video ' + err);
+    //     } else {
+    //         console.log('Saved video: ' + file);
+    //     }
+    //   });
+    // })
   }
 
   function handleUserMediaError(e) {
