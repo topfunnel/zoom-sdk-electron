@@ -156,10 +156,10 @@ function sdkauthCB1(status) {
     showLoginWindow();
 
     var opt = {
-      meetingnum: "95759621540",
+      meetingnum: "95644096509",
       zoomaccesstoken: "zoomaccesstoken",
       username: "electron recorder",
-      psw: "DKq352",
+      psw: "VHE0fX",
       isvideooff: true,
       isaudiooff: true
     }
