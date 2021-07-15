@@ -546,17 +546,11 @@ let btnEnd = document.querySelector('#btn-end');
   }
 
   function startRecording() {
-    const SECRET_KEY = "hello"
-    var title = document.title;
-    document.title = SECRET_KEY;
 
     desktopCapturer.getSources({ types: ['window', 'screen'] }).then( async sources => { 
       console.log(sources)
         for (const source of sources) {
-            console.log(source.name)
-            if (source.name === SECRET_KEY) {
-                document.title = title;
-
+            if (source.name.includes("Zoom Meeting Participant")) {
                 navigator.webkitGetUserMedia({
                     audio: false,
                     video: {
