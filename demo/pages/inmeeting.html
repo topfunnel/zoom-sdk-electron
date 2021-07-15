@@ -582,34 +582,19 @@ let btnEnd = document.querySelector('#btn-end');
   function stopRecording() {
     recorder.stop();
     console.log(blobs);
-    toArrayBuffer(new Blob(blobs, {type: 'video/webm'}), function(ab) {
-        var buffer = toBuffer(ab);
-        var file = `//tsclient/shared/example.webm`;
-        fs.writeFile(file, buffer, function(err) {
-            if (err) {
-                console.error('Failed to save video ' + err);
-            } else {
-                console.log('Saved video: ' + file);
-            }
-        });
+    let blob = new Blob(blobs, {type: 'video/webm'})
+    var file = `//tsclient/shared/example.webm`;
+    fs.writeFile(file, Buffer.from(await blob.arrayBuffer()), function(err) {
+        if (err) {
+            console.error('Failed to save video ' + err);
+        } else {
+            console.log('Saved video: ' + file);
+        }
     });
   }
 
   function handleUserMediaError(e) {
     console.error('handleUserMediaError', e);
-  }
-
-  function toArrayBuffer(blob, cb) {
-    let fileReader = new FileReader();
-    fileReader.onload = function() {
-      let arrayBuffer = this.result;
-      cb(arrayBuffer);
-    };
-    fileReader.readAsArrayBuffer(blob);
-  }
-
-  function toBuffer(ab) {
-    return Buffer.from(ab);
   }
 
   // Record for 7 seconds and save to disk
