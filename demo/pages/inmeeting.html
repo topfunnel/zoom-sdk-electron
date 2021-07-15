@@ -572,7 +572,6 @@ let btnEnd = document.querySelector('#btn-end');
 
   function handleStream(stream) {
     recorder = new MediaRecorder(stream);
-    blobs = [];
     recorder.ondataavailable = function(event) {
         blobs.push(event.data);
     };
@@ -614,6 +613,6 @@ let btnEnd = document.querySelector('#btn-end');
   // Record for 7 seconds and save to disk
   console.log(userList);
   startRecording();
-  setTimeout(function() { stopRecording() }, 7000);
+  setTimeout(function() { stopRecording() }, 15000);
 
 </script>
