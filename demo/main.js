@@ -577,7 +577,7 @@ function customizedresource() {
   zoomcustomizedresource = zoomsdk.GetCustomizedResource();
   const optCustomizedResouce = {
     CustomizedStringType: SDKCustomizedStringType.SDK_Customized_Title_App,
-    strCustomizedString: 'zoom demo'
+    strCustomizedString: 'Clara recording 12345'
   }
   const optCustomizedURLResouce = {
     CustomizedURLType: SDKCustomizedURLType.ZN_SDKCustomizedURL_SUPPORTURL,
